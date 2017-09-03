@@ -7,7 +7,7 @@
 
 조원 : [이도규](https://github.com/ldkl123), 정민재, [정현철](https://github.com/junghyeonchiul), [조민수](https://github.com/KoG-8)
 
-연락처 : 정민재(010-3833-5688)
+연락처 : 정민재(010-3833-5688), 이도규(010-2818-6732)
 
 ## 0. 목차
 1. 실행에 앞서
