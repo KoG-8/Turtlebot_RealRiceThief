@@ -1,6 +1,8 @@
 # Turtlebot_RealRiceThief
 
-# 레알밥도둑 터틀봇
+# 레알밥도둑 터틀봇 - 간장게장
+![teamlogo](/colorlogo.png)
+
 조원 : [이도규](https://github.com/ldkl123), 정민재, [정현철](https://github.com/junghyeonchiul), [조민수](https://github.com/KoG-8)
 
 ## 0. 목차
