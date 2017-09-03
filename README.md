@@ -93,130 +93,45 @@ codeblock
 설명
 
 ### 3.6. 터널
+
+터널에서는 라이다를 사용하여 터틀봇 주변의 장애물을 파악하여 피하고 방향설정을 통하여 출구로 나가게끔 알고리즘을 구성했다.
+
+1. 라이다에서 값을 받아와서 원하는 값으로 가공하는 노드
+
+주로 필요한 정면의 거리값을 배열로 받아서 정면, 왼쪽, 오른쪽으로 나누어서 라벨링한다.
+
+하지만 가끔 라이다 값이 0으로 튀는 일이 발생한다.
 ~~~
-#!/usr/bin/env python
-import rospy
-import numpy
-from sensor_msgs.msg import LaserScan
-from wall.msg import raw_sensor_8_10
-import copy
-rospy.init_node('sensor', anonymous=True)
-pub = rospy.Publisher('/raw_sensor', raw_sensor_8_10, queue_size = 5)
-rate = rospy.Rate(10)
-
-global data2
-global copy_data
-global count
-
-raw = raw_sensor_8_10()
-data2 = [0,0,0,0,0]
-copy_data = [0,0,0,0,0]
-count = 0
-
-##############################################################################
-####  Accept Lidar values and process the values (main)  #####################
-##############################################################################
-
-def callback(data):
-	global data2
-	global copy_data
-	SensorData = data.ranges       #  라이다에서 데이터를 받아온다.
-	
-
-	Front = SensorData[1:18]+SensorData[342:359]
-	real_Front = SensorData[1:5] + SensorData[354:359]
-	Left = SensorData[54:90]
-	Front_Left = SensorData[18:54]                   # 데이터들을 터틀봇의 방향에따라 데이터를 나눈다.
-	Front_Right = SensorData[306:342]
-	Right = SensorData[270:306]
-	
-	Left_side = SensorData[85:95]
-	Right_side = SensorData[265:275]
-	
-	Left_Beside = SensorData[60:70]
-	Right_Beside = SensorData[290:300]
-
-	back = SensorData[135:225]
-	
-	Front_Left_avg = avg(Front_Left)
-	Front_Right_avg = avg(Front_Right)
-	Left_avg = avg(Left)			# 데이터가 튀는 경우가 발생하기 때문에 (값이 0 으로 나온다) 각각의 변수의 튀는 값을 뺀
-	Right_avg = avg(Right)			# 평균 값을 구해서 저장한다.
-	Left_Beside_avg = avg(Left_Beside)		
-	Right_Beside_avg = avg(Right_Beside)
-	Left_side_avg = avg(Left_side)
-	Right_side_avg = avg(Right_side)
-	Front_avg = avg(Front)
-	Back_avg = avg(back)
-	real_Front_avg = avg(real_Front) 
-
-##############################################################################
-####  Save the process values in messege form  ###############################
-##############################################################################
-	
- raw.data = [Front_avg, Left_avg, Front_Left_avg, Front_Right_avg, Right_avg, Left_Beside_avg, Right_Beside_avg, Back_avg, real_Front_avg, Left_side_avg, Right_side_avg]	
-
-	raw.sharp = [SensorData[40], SensorData[29], SensorData[20], SensorData[9], SensorData[350], SensorData[339], SensorData[329], SensorData[320]]
-	
-	raw.front = [avg(SensorData[37:40]), avg(SensorData[33:35]), avg(SensorData[26:29]), avg(SensorData[23:25]), avg(SensorData[16:18]), avg(SensorData[13:15]), avg(SensorData[344:346]), avg(SensorData[338:340]), avg(SensorData[332:335]), avg(SensorData[330:334]), avg(SensorData[329:331]), avg(SensorData[321:324]) ]
-	
-##############################################################################
-	
- data2 = [Front_Left_avg, Front_avg , Front_Right_avg]
-
-	copy_data = copy.copy(data2)
-
-	data2.sort(reverse=True)
-
-	find_same(data2[0])
-	find_same(data2[1])
-	
-	rospy.loginfo(raw.front)
-	pub.publish(raw)
-
-####  main ends ###############################################################
-
-
-
-
-##############################################################################
-####  Functions  #############################################################
-##############################################################################
+Front_Left_avg = avg(Front_Left)
+...
+~~~
+아래 코드는 튀는 값 0을 제외하고 평균값을 내는 함수이다.
+~~~
 def avg(data):
-	return 	sum(data)/(len(data)-data.count(0)+0.01)           # It makes several value's average
+	return 	sum(data)/(len(data)-data.count(0)+0.01) 
+~~~
+평균낸 값을 다른 노드로 보내기 위해서 퍼블리쉬를 한다.
+~~~
+raw.data = [...]
+raw.sharp = [...]
+raw.front = [... ]
+~~~
+data는 전반적인 각도들의 묶음, sharp는 소수개수의 각도의 묶음이다.
 
+다음으로 data2는 왼쪽, 가운데, 오른쪽 중에서 가장 먼곳을 가려내기 위해서 구성된다.
+~~~
+data2 = [Front_Left_avg, Front_avg , Front_Right_avg]
+~~~
+Sort로 내림차순으로 배열을 정리하여 가장 큰값을 맨앞으로 보낸다.
+~~~
+data2.sort(reverse=True)
+~~~
 
-
-
-def find_same(data1):
-	global data2
-	global copy_data
-	global count
-
-	
-	for i in range(0, len(copy_data)):
-		if copy_data[i] == data1:
-			if count ==0:
-				raw.Flag = i+1
-				raw.Far = data1
-				pub.publish(raw)
-				count = 1
-			else: 
-				raw.Flag2 = i+1
-				pub.publish(raw)
-				count = 0
-
-
-def scan_sensor():
-	rospy.Subscriber('/scan', LaserScan, callback)
-	rospy.spin()			  
-	
-if __name__ == '__main__':
-	try:	
-		scan_sensor()
-	except rospy.ROSInterruptException:
-		pass
-
+그 다음 기존의 data2 배열에서 몇번째 값이였는지 가려내기 위해 find_same 함수를 쓴다.
+~~~
+find_same(data2[0])
+~~~	
+값을 찾아내면 그 값의 배열번호를 다른노드로 퍼블리쉬한다.
 
 
 #!/usr/bin/env python
