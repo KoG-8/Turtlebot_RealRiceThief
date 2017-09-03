@@ -12,12 +12,27 @@
 
 
 ## 1. 실행에 앞서 필요한 것들
-1.1 이것
+1.1 하드웨어
 
-1.2 저것
+기본 터틀봇 구성품에 더해서 아래 품목을 추가로 사용했습니다.
 
-1.3 이것도
+  + Raspberry Pi
+  
+  + Raspberry Pi Camera
+  
+  + Raspberry Pi Camera - Fisheye Lens (LS-40180)
+  
+  + Logitech C920 USB Webcam
+  
+  + HC-SR04 Ultrasonic Sensor
+ 
 
+
+1.2 소프트웨어
+
+  + 이것
+
+  + 저것
 
 
 ## 2. 실행법 
