@@ -4,15 +4,15 @@
 조원 : [이도규](https://github.com/ldkl123), 정민재, 정현철, [조민수](https://github.com/KoG-8)
 
 ## 0. 목차
-1. 실행에 앞서 필요한 것들
+1. 실행에 앞서
 
 2. 실행법
 
 3. 부분별 세부 설명
 
 
-## 1. 실행에 앞서 필요한 것들
-**1.1 하드웨어**
+## 1. 실행에 앞서
+**1.1. 사용한 하드웨어**
 
 기본 터틀봇 구성품에 더해서 아래 품목을 추가로 사용했습니다.
  
@@ -30,7 +30,7 @@
 
 
 
-**1.2 소프트웨어**
+**1.2. 사용한 소프트웨어**
 
   + ROS Kinetic
 
@@ -41,6 +41,10 @@
   + Arduino Firmware
   
   + Ubuntu 16.04
+
+**1.3. 사용한 오픈소스**
+
+  + [raspicam_node](https://github.com/fpasteau/raspicam_node) by [fpasteau](https://github.com/fpasteau)
 
 
 ## 2. 실행법 
