@@ -120,13 +120,13 @@ count = 0
 def callback(data):
 	global data2
 	global copy_data
-	SensorData = data.ranges       # Get the data from Lidar
+	SensorData = data.ranges       #  라이다에서 데이터를 받아온다.
 	
 
 	Front = SensorData[1:18]+SensorData[342:359]
 	real_Front = SensorData[1:5] + SensorData[354:359]
 	Left = SensorData[54:90]
-	Front_Left = SensorData[18:54]                   # Seperate the data depend of direction of turtlebot
+	Front_Left = SensorData[18:54]                   # 데이터들을 터틀봇의 방향에따라 데이터를 나눈다.
 	Front_Right = SensorData[306:342]
 	Right = SensorData[270:306]
 	
@@ -140,8 +140,8 @@ def callback(data):
 	
 	Front_Left_avg = avg(Front_Left)
 	Front_Right_avg = avg(Front_Right)
-	Left_avg = avg(Left)				# Each data has least 10 values including error values like coming up zero value
-	Right_avg = avg(Right)				# so if error occured, except error values and make the average of their data			
+	Left_avg = avg(Left)			# 데이터가 튀는 경우가 발생하기 때문에 (값이 0 으로 나온다) 각각의 변수의 튀는 값을 뺀
+	Right_avg = avg(Right)			# 평균 값을 구해서 저장한다.
 	Left_Beside_avg = avg(Left_Beside)		
 	Right_Beside_avg = avg(Right_Beside)
 	Left_side_avg = avg(Left_side)
