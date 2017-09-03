@@ -3,7 +3,7 @@
 # 레알밥도둑 터틀봇 - 간장게장
 ![teamlogo](/colorlogo.png)
 
-대회에 앞서 조민수 학우가 직접 만든 팀 로고 입니다.^^
+<수제 팀 로고>
 
 조원 : [이도규](https://github.com/ldkl123), 정민재, [정현철](https://github.com/junghyeonchiul), [조민수](https://github.com/KoG-8)
 
