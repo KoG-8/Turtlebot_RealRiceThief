@@ -1,7 +1,7 @@
 # Turtlebot_RealRiceThief
 
 # 레알밥도둑 터틀봇
-조원 : 이도규, 정민재, 정현철, [조민수](https:www.naver.com)
+조원 : 이도규, 정민재, 정현철, [조민수](https:www.google.com)
 
 ## 0. 목차
 1. 실행에 앞서 필요한 것들
