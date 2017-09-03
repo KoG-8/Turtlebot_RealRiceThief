@@ -68,6 +68,8 @@
 ![graph2](/graph2.png)
 
 ### 3.2. 라인트레이싱
+
+turtle_video_siljun.py의 def line_trace에있는 구문입니다.
 ~~~
 gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY) ### Process image to make finding line easy
 	ROI=gray[350:,140:500]
@@ -135,6 +137,8 @@ if i==2:
 추출한 라인의 각도를 이용하여 line tracing했습니다.
 
 ### 3.3. 신호등
+
+main.py에 있는 def sinho 구문입니다.
 ~~~
 def shinho(blob_ROI,stage,angular): ###Function that run when stage=0
 
@@ -187,6 +191,8 @@ if f_g==1 and f_r==1 and s_g==1:
 
 
 ### 3.4. 주차
+
+main.py에 있는 def jucha 구문입니다.
 ~~~
 def jucha(num,angular): ### Function that run when stage=1
 
@@ -292,6 +298,8 @@ elif line_count==2:
 
 
 ### 3.5. 차단바
+
+main.py에 있는 def chadan 구문입니다.
 ~~~
 def chadan(dist): ### Function that run when stage=2
 
