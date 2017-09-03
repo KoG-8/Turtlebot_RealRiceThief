@@ -26,7 +26,7 @@
   
   + Logitech C920 USB Webcam
   
-  + HC-SR04 Ultrasonic Sensor
+  + 2x HC-SR04 Ultrasonic Sensor
 
 
 
