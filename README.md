@@ -32,9 +32,17 @@
 
 **1.2 소프트웨어**
 
-  + 이것
+  + ROS
+  
+  + ROS Kinetic
 
-  + 저것
+  + Python 2
+  
+  + OpenCV 3
+  
+  + Arduino Firmware
+  
+  + Ubuntu 16.04
 
 
 ## 2. 실행법 
