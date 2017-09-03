@@ -32,8 +32,6 @@
 
 **1.2 소프트웨어**
 
-  + ROS
-  
   + ROS Kinetic
 
   + Python 2
