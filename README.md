@@ -1,7 +1,7 @@
 # Turtlebot_RealRiceThief
 
 # 레알밥도둑 터틀봇
-조원 : [이도규](https://github.com/ldkl123), 정민재, 정현철, [조민수](https://github.com/KoG-8)
+조원 : [이도규](https://github.com/ldkl123), 정민재, [정현철](https://github.com/junghyeonchiul), [조민수](https://github.com/KoG-8)
 
 ## 0. 목차
 1. 실행에 앞서
