@@ -66,29 +66,245 @@
 
 ### 3.2. 라인트레이싱
 ~~~
-codeblock
+gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY) ### Process image to make finding line easy
+	ROI=gray[350:,140:500]
+	ROI=cv2.GaussianBlur(ROI,(7,7),0)
+	thr=cv2.adaptiveThreshold(ROI,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+	blur=cv2.medianBlur(thr,9)	
+	edge=cv2.Canny(blur,180,360)
 ~~~
+frame이 원본 이미지 입니다.
+원본이미지를뒤 각종blur를 사용하여 침식_팽창 과정을 거친 뒤
 
-설명
+~~~
+lines=cv2.HoughLinesP(edge,1,np.pi/180,30,25,30)
+
+
+		lineL=[]
+		lineR=[]
+		L=0	
+		R=0
+		i=0
+		Ldegree=0
+		Rdegree=0
+
+		if lines is not None:
+			lines=[l[0] for l in lines]
+			for line in lines:
+				
+				x1,y1,x2,y2=line
+				degree=np.arctan2(y2-y1,x2-x1)*180/np.pi
+				if degree>0 and R==0:
+					i+=1
+					Rdegree=degree
+					lineR.append(line)
+					R+=2
+					cv2.circle(frame,(x1+140,y1+350),10,(0,0,255),-1)
+					cv2.circle(frame,(x2+140,y2+350),10,(255,0,255),-1)
+					cv2.line(frame,(x1+140,y1+350),(x2+140,y2+350),(0,100,100),3)
+				elif degree<0 and L==0:
+					i+=1
+					Ldegree=degree
+					lineL.append(line)
+					L+=2
+					cv2.circle(frame,(x1+140,y1+350),10,(0,0,255),-1)
+					cv2.circle(frame,(x2+140,y2+350),10,(255,0,255),-1)
+					cv2.line(frame,(x1+140,y1+350),(x2+140,y2+350),(0,100,100),3)
+				else:
+					continue
+~~~
+houghlinesP를뒤 이용하여 라인을 추출한 뒤
+
+~~~
+if i==2:
+		return frame,(Ldegree+Rdegree)*0.012 ### if there are two lines, then angular_vel depends on difference of angle
+
+
+	elif i==1: ### if there are one line, then angular_vel depends on that's inverse number
+		if Ldegree==0:
+			return frame,(18/(Rdegree+1.9))
+		else:
+			return frame,(18/(Ldegree-1.9))
+
+	else:
+		return frame,0 ### if line not exist, then return 0 angular_vel
+~~~
+추출한 라인의 각도를 이용하여 line tracing했습니다.
 
 ### 3.3. 신호등
 ~~~
-codeblock
+def shinho(blob_ROI,stage,angular): ###Function that run when stage=0
+
+	global f_r; global s_g
+
+	if f_g==1 and f_r==0 and s_g==0:		
+		keypoints_red=turtle_video_siljun.find_color(blob_ROI,lower_red,upper_red,stage)  
+		print('first green signal detected.')
+
+		if keypoints_red:
+			f_r=1
+		else:
+			turtlemove(0.06,angular)
+		return 0
 ~~~
 
-설명
+카메라가green_blob을찾으면실행되는함수입니다.
+first_green 을나타내는 f_g
 
-### 3.4. 표지판
-~~~
-codeblock
-~~~
+first_red 를나타내는 f_r
 
-설명
+second_green 을나타내는 s_g
+
+세 전역변수를 이용하여 신호구간을 만들었습니다.
+
+일단 첫번째 초록이 감지되면 실행하는 부분입니다.
+빨강이 감지될때까지 라인트레이싱을 하는부분입니다.
+return 0 은 stage값을 리턴하는것인데 신호구간의 스테이지값을 0으로 지정해서 그렇습니다.
+
+~~~
+if f_g==1 and f_r==1 and s_g==0:
+		keypoints_green=turtle_video_siljun.find_color(blob_ROI,lower_green,upper_green,stage)	
+		print('red signal detected. waiting secondary green signal.')
+		turtlemove(0,0)
+
+		if keypoints_green:						
+			s_g=1
+		return 0
+~~~
+첫번째 초록을 감지후 첫번째 빨강을 감지한다면 다음 초록을 감지할때까지 멈춰있는 부분입니다.
+
+~~~
+if f_g==1 and f_r==1 and s_g==1:
+		print('second green signal detected.') 
+		turtlemove(0.06,angular)
+		s_g=2
+		return 100		
+~~~
+두번째 초록을 감지하면 일상상태인 stage값 100으로 리턴하여 신호구간을 마칩니다.
+
+
+### 3.4. 주차
+~~~
+def jucha(num,angular): ### Function that run when stage=1
+
+
+	global line_count; global park_count; global lt;
+	print(line_count)
+
+	if line_count==0:
+
+		if num[0]==0:
+			turtlemove(0.06,angular)
+			return 1
+
+		else:
+			line_count=1
+			return 1
+~~~
+카메라가 주차표지판을 인식한 뒤 실행하는 함수입니다.
+num은 in_jucha.py에서 발행하는 것인데 터틀봇우측에달린 웹캠이 흰선이 검출됬나,주차할 공간이 있는가를 담고있습니다.
+line_count는 우측에 선이 몇 번 검출됬나 이고
+park_count는 주차를 안한상태면 0 했으면 1입니다.
+lt는 알고리즘구현을 위하여 임의로 만든 상수입니다.
+
+num은 [흰선이검출됬나,주차할공간이있는가]로 구성되있습니다.
+일단 표지판인식후 우측에선이 검출될때까지 라인트레이싱하는 부분입니다.
+
+~~~
+elif line_count==1:
+
+		if num[0]==1 and lt==0:
+			turtlemove(0.06,angular)
+			return 1
+
+		elif num[0]==0 and lt==0:
+
+			if num[1]==1:
+				turtlemove(0.11,-0.7)
+				rospy.sleep(rospy.Duration(2))
+				turtlemove(0.1,0)
+				rospy.sleep(rospy.Duration(1.7))
+				turtlemove(0,0)
+				rospy.sleep(time)
+				turtlemove(-0.1,0)
+				rospy.sleep(rospy.Duration(1.7))
+				turtlemove(-0.11,0.7)
+				rospy.sleep(rospy.Duration(2))
+				turtlemove(0,0)	
+				park_count=1
+				lt=1
+				return 1
+
+			else:
+				lt=1
+				return 1
+			
+		else:			
+			turtlemove(0.06,angular)
+
+			if num[0]==1:				
+				line_count=2
+				return 1
+
+			return 1
+~~~
+우측에 선이 첫번째로 검출됬을때 주차할 공간이 있으면 주차, 없으면 다음라인을 검출할때까지 라인트레이싱 합니다.
+
+~~~
+elif line_count==2:
+
+		if num[0]==1 and lt==1:
+			turtlemove(0.06,angular)
+			return 1
+
+		elif num[0]==0 and park_count==0 and lt==1:
+			turtlemove(0.11,-0.7)
+			rospy.sleep(rospy.Duration(2))
+			turtlemove(0.1,0)
+			rospy.sleep(rospy.Duration(2))
+			turtlemove(0,0)
+			rospy.sleep(time)
+			turtlemove(-0.1,0)
+			rospy.sleep(rospy.Duration(2))
+			turtlemove(-0.11,0.7)
+			rospy.sleep(rospy.Duration(2))
+			turtlemove(0,0)
+			lt=2
+			return 1
+
+		elif park_count==1 and lt==1:
+			lt=2
+			return 1
+		else:
+			turtlemove(0.06,angular)
+
+			if num[0]==1:
+				line_count=3
+				return 100
+
+			return 1
+~~~
+두번째로 선을 검출했을때 주차를 이미 한 상태라면 다음선을 검출할때까지 라인트레이싱,주차를 안 한 상태라면 주차를 합니다.
+그런뒤 세번째라인을 지나면 일상상태 stage=100으로 돌아가며 주차구간을 종료합니다.
+
 
 ### 3.5. 차단바
 ~~~
-codeblock
+def chadan(dist): ### Function that run when stage=2
+
+	print(dist)
+	
+	if dist<15:
+		turtlemove(0,0)
+		return 2
+
+	else:
+		rospy.sleep(rospy.Duration(2))
+		return 100
 ~~~
+차단바를 감지하기위한 센서가 일정거리 이하를 감지하면 실행되는 터널구간함수입니다.
+일정거리 이하를 계속 검출하면 정지, 일정거리 이상이 감지되면 종료됩니다.
+
 
 설명
 
@@ -134,15 +350,6 @@ find_same(data2[0])
 값을 찾아내면 그 값의 배열번호를 다른노드로 퍼블리쉬한다.
 
 
-2. 벽을 감지하여 터틀봇에 속도를 보내는 노드
-
-1-1 위치 저장
-만약 이미 지나갔던 곳으로 다시 가게되면 무한루프에 빠질 가능성이 커진다. 따라서 터틀봇의
-위치를 알려주는 /odom 토픽 메세지를 받아서 입구를 비롯하여 막혔던 부분의 위치를 저장한다.
-~~~
-def store_pose():
-~~~
-위치를 저장한 후에는 그 위치를 
 #!/usr/bin/env python
 import rospy
 import numpy
