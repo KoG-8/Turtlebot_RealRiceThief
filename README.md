@@ -20,7 +20,7 @@
 ## 1. 실행에 앞서
 **1.1. 사용한 하드웨어**
 
-![turtlebot](/turtlebot.jpg)
+![turtlebot](/turtlebot2.jpg)
 
 기본 터틀봇 구성품에 더해서 아래 품목을 추가로 사용했습니다.
  
