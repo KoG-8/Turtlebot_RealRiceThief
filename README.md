@@ -16,7 +16,7 @@
 
 기본 터틀봇 구성품에 더해서 아래 품목을 추가로 사용했습니다.
 
-  + Raspberry Pi
+  + Raspberry Pi
   
   + Raspberry Pi Camera
   
@@ -24,7 +24,7 @@
   
   + Logitech C920 USB Webcam
   
-  + HC-SR04 Ultrasonic Sensor
+  + HC-SR04 Ultrasonic Sensor
  
 
 
