@@ -43,8 +43,8 @@
   + Ubuntu 16.04
 
 **1.3. 사용한 오픈소스**
-
-  + [raspicam_node](https://github.com/fpasteau/raspicam_node) by [fpasteau](https://github.com/fpasteau)
+  
+  + [raspicam_node](https://github.com/fpasteau/raspicam_node) by [fpasteau](https://github.com/fpasteau)
 
 
 ## 2. 실행법 
