@@ -65,7 +65,7 @@
 ### 3.1. 알고리즘
 ![graph1](/graph1.png)
 
-![graph2](/graph2.png)
+![graph2](/Algorithm.png)
 
 ### 3.2. 라인트레이싱
 
