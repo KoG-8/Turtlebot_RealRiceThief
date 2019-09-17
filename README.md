@@ -1,6 +1,4 @@
-# Turtlebot_RealRiceThief
-
-# 2017 R-viz challenge 터틀봇3 오토레이스 부분 우승 & 대통령상 수상
+## 2017 R-viz challenge 터틀봇3 오토레이스 부분 우승 & 대통령상 수상
 
 # 레알밥도둑 터틀봇 - 간장게장
 ![teamlogo](/colorlogo.png)
