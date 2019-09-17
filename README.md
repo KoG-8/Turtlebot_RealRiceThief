@@ -1,9 +1,9 @@
 # Turtlebot_RealRiceThief
 
+# 2017 R-viz challenge 터틀봇3 오토레이스 부분 우승 & 대통령상 수상
+
 # 레알밥도둑 터틀봇 - 간장게장
 ![teamlogo](/colorlogo.png)
-
-<수제 팀 로고>
 
 조원 : [이도규](https://github.com/ldkl123), 정민재, [정현철](https://github.com/junghyeonchiul), [조민수](https://github.com/KoG-8)
 
