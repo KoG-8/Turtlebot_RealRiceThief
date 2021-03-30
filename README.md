@@ -3,7 +3,7 @@
 # 레알밥도둑 터틀봇 - 간장게장
 ![teamlogo](/colorlogo.png)
 
-조원 : [이도규](https://github.com/ldkl123), 정민재, [정현철](https://github.com/junghyeonchiul), [조민수](https://github.com/KoG-8)
+조원 : [이도규](https://github.com/ldkl123), 정민재(https://github.com/keep9oing), [정현철](https://github.com/junghyeonchiul), [조민수](https://github.com/KoG-8)
 
 연락처 : 정민재(010-3833-5688), 이도규(010-2818-6732)
 
